@@ -1,6 +1,6 @@
 // src/styles/global.ts
-import { createGlobalStyle } from 'styled-components';
-import { Theme } from './theme';
+import { createGlobalStyle } from "styled-components";
+import { Theme } from "./theme";
 
 export const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap');
@@ -50,6 +50,15 @@ export const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   code {
     font-family: ${({ theme }) => theme.fonts.code};
   }
+  
+  html, body, #root {
+  height: 100%;
+}
+
+  #root {
+  display: flex;
+  flex-direction: column;
+}
   
   /* Para dispositivos móveis */
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.md}) {
