@@ -1,13 +1,22 @@
-// src/pages/Projects.tsx
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 import SectionTitle from '../components/ui/SectionTitle';
-import Card from '../components/ui/Card';
-import Button from '../components/ui/Button';
-import { FiGithub, FiExternalLink } from 'react-icons/fi';
+import ProjectCard from '../components/ui/ProjectCard';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const ProjectsSection = styled.section`
   padding: ${({ theme }) => theme.spacing['3xl']} 0;
+  animation: ${fadeIn} 0.8s ease;
 `;
 
 const ProjectsGrid = styled.div`
@@ -20,55 +29,31 @@ const ProjectsGrid = styled.div`
   }
 `;
 
-const ProjectCard = styled(Card)`
-  height: 100%;
+const FilterContainer = styled.div`
   display: flex;
-  flex-direction: column;
-`;
-
-const ProjectImage = styled.div`
-  height: 200px;
-  background-color: ${({ theme }) => theme.colors.secondaryLight};
-  border-radius: ${({ theme }) => theme.borderRadius.md} ${({ theme }) => theme.borderRadius.md} 0 0;
-`;
-
-const ProjectContent = styled.div`
-  padding: ${({ theme }) => theme.spacing.lg};
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-`;
-
-const ProjectTitle = styled.h3`
-  font-size: ${({ theme }) => theme.fontSizes.lg};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-  color: ${({ theme }) => theme.colors.text};
-`;
-
-const ProjectDescription = styled.p`
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-  flex-grow: 1;
-`;
-
-const TechStack = styled.div`
-  display: flex;
+  justify-content: center;
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
   flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing.xs};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  gap: ${({ theme }) => theme.spacing.sm};
 `;
 
-const TechTag = styled.span`
-  background-color: ${({ theme }) => theme.colors.primaryLight};
-  color: #fff;
-  padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
-  border-radius: ${({ theme }) => theme.borderRadius.sm};
-  font-size: ${({ theme }) => theme.fontSizes.xs};
+const FilterButton = styled.button<{ $active: boolean }>`
+  background-color: ${({ theme, $active }) => 
+    $active ? theme.colors.primary : 'transparent'};
+  color: ${({ theme, $active }) => 
+    $active ? '#fff' : theme.colors.text};
+  border: 1px solid ${({ theme, $active }) => 
+    $active ? theme.colors.primary : theme.colors.border};
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.md}`};
+  border-radius: ${({ theme }) => theme.borderRadius.full};
+  cursor: pointer;
   font-weight: ${({ theme }) => theme.fontWeights.medium};
-`;
-
-const ProjectLinks = styled.div`
-  display: flex;
-  gap: ${({ theme }) => theme.spacing.md};
+  transition: all ${({ theme }) => theme.transitions.fast};
+  
+  &:hover {
+    background-color: ${({ theme, $active }) => 
+      $active ? theme.colors.primary : theme.colors.border};
+  }
 `;
 
 interface Project {
@@ -78,6 +63,7 @@ interface Project {
   techStack: string[];
   githubUrl: string;
   demoUrl?: string;
+  category: string;
 }
 
 const projectsData: Project[] = [
@@ -87,6 +73,7 @@ const projectsData: Project[] = [
     description: 'Projeto final de disciplina focado em desenvolvimento mobile com React Native. Criação de aplicação com frontend em TypeScript e backend em Node.js.',
     techStack: ['React Native', 'TypeScript', 'Node.js'],
     githubUrl: 'https://github.com/Whiskyrie/TransportManager',
+    category: 'mobile',
   },
   {
     id: 2,
@@ -94,6 +81,7 @@ const projectsData: Project[] = [
     description: 'Sistema de gerenciamento de transportes desenvolvido para otimizar administração de frotas e logística. Implementação com frontend em Uno Platform e backend em C# e SQLite.',
     techStack: ['C#', 'Uno Platform', 'SQLite'],
     githubUrl: 'https://github.com/Whiskyrie/TrabalhoFinal-RubiRide',
+    category: 'desktop',
   },
   {
     id: 3,
@@ -101,51 +89,51 @@ const projectsData: Project[] = [
     description: 'Aplicativo de sincronização de tarefas desenvolvido com Node.js. Sincronização de tarefas feitas quando identifica-se que o usuário está online.',
     techStack: ['Node.js', 'JavaScript'],
     githubUrl: 'https://github.com/Whiskyrie/TaskSyncApp',
+    category: 'web',
   },
 ];
 
 const Projects: React.FC = () => {
+  const [activeFilter, setActiveFilter] = useState<string>('all');
+  
+  const categories = [
+    { id: 'all', label: 'Todos' },
+    { id: 'web', label: 'Web' },
+    { id: 'mobile', label: 'Mobile' },
+    { id: 'desktop', label: 'Desktop' },
+  ];
+  
+  const filteredProjects = activeFilter === 'all' 
+    ? projectsData 
+    : projectsData.filter(project => project.category === activeFilter);
+    
   return (
     <ProjectsSection>
       <SectionTitle>Meus Projetos</SectionTitle>
+      
+      <FilterContainer>
+        {categories.map(category => (
+          <FilterButton 
+            key={category.id}
+            $active={activeFilter === category.id}
+            onClick={() => setActiveFilter(category.id)}
+          >
+            {category.label}
+          </FilterButton>
+        ))}
+      </FilterContainer>
+      
       <ProjectsGrid>
-        {projectsData.map((project) => (
-          <ProjectCard key={project.id}>
-            <ProjectImage />
-            <ProjectContent>
-              <ProjectTitle>{project.title}</ProjectTitle>
-              <ProjectDescription>{project.description}</ProjectDescription>
-              <TechStack>
-                {project.techStack.map((tech) => (
-                  <TechTag key={tech}>{tech}</TechTag>
-                ))}
-              </TechStack>
-              <ProjectLinks>
-                <Button
-                  as="a"
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variant="outline"
-                  size="sm"
-                >
-                  <FiGithub style={{ marginRight: '4px' }} /> GitHub
-                </Button>
-                {project.demoUrl && (
-                  <Button
-                    as="a"
-                    href={project.demoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    variant="primary"
-                    size="sm"
-                  >
-                    <FiExternalLink style={{ marginRight: '4px' }} /> Demo
-                  </Button>
-                )}
-              </ProjectLinks>
-            </ProjectContent>
-          </ProjectCard>
+        {filteredProjects.map((project) => (
+          <ProjectCard
+            key={project.id}
+            id={project.id}
+            title={project.title}
+            description={project.description}
+            techStack={project.techStack}
+            githubUrl={project.githubUrl}
+            demoUrl={project.demoUrl}
+          />
         ))}
       </ProjectsGrid>
     </ProjectsSection>

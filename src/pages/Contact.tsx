@@ -1,12 +1,30 @@
 // src/pages/Contact.tsx
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import SectionTitle from '../components/ui/SectionTitle';
 import Button from '../components/ui/Button';
-import { FiMail, FiPhone, FiMapPin, FiLinkedin, FiGithub } from 'react-icons/fi';
+import { FiMail, FiPhone, FiMapPin, FiLinkedin, FiGithub, FiCheck } from 'react-icons/fi';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const shake = keyframes`
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+`;
 
 const ContactSection = styled.section`
   padding: ${({ theme }) => theme.spacing['3xl']} 0;
+  animation: ${fadeIn} 0.8s ease;
 `;
 
 const ContactContainer = styled.div`
@@ -24,6 +42,11 @@ const ContactInfo = styled.div`
   border-radius: ${({ theme }) => theme.borderRadius.lg};
   padding: ${({ theme }) => theme.spacing.xl};
   box-shadow: ${({ theme }) => theme.boxShadow.md};
+  transition: transform ${({ theme }) => theme.transitions.normal};
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
 `;
 
 const ContactInfoTitle = styled.h3`
@@ -83,10 +106,16 @@ const ContactForm = styled.form`
   border-radius: ${({ theme }) => theme.borderRadius.lg};
   padding: ${({ theme }) => theme.spacing.xl};
   box-shadow: ${({ theme }) => theme.boxShadow.md};
+  transition: transform ${({ theme }) => theme.transitions.normal};
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
 `;
 
 const FormGroup = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.lg};
+  position: relative;
 `;
 
 const FormLabel = styled.label`
@@ -95,54 +124,71 @@ const FormLabel = styled.label`
   font-weight: ${({ theme }) => theme.fontWeights.medium};
 `;
 
-const FormInput = styled.input`
+const FormInput = styled.input<{ $hasError?: boolean }>`
   width: 100%;
   padding: ${({ theme }) => theme.spacing.md};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: 1px solid ${({ theme, $hasError }) => 
+    $hasError ? theme.colors.error : theme.colors.border};
   border-radius: ${({ theme }) => theme.borderRadius.md};
   font-family: ${({ theme }) => theme.fonts.main};
   font-size: ${({ theme }) => theme.fontSizes.md};
+  transition: all ${({ theme }) => theme.transitions.fast};
+  animation: ${({ $hasError }) => $hasError ? shake : 'none'} 0.5s;
   
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors.primary};
+    border-color: ${({ theme, $hasError }) => 
+      $hasError ? theme.colors.error : theme.colors.primary};
+    box-shadow: 0 0 0 2px ${({ theme, $hasError }) => 
+      $hasError ? `${theme.colors.error}33` : `${theme.colors.primary}33`};
   }
 `;
 
-const FormTextarea = styled.textarea`
+const FormTextarea = styled.textarea<{ $hasError?: boolean }>`
   width: 100%;
   padding: ${({ theme }) => theme.spacing.md};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: 1px solid ${({ theme, $hasError }) => 
+    $hasError ? theme.colors.error : theme.colors.border};
   border-radius: ${({ theme }) => theme.borderRadius.md};
   font-family: ${({ theme }) => theme.fonts.main};
   font-size: ${({ theme }) => theme.fontSizes.md};
   min-height: 150px;
   resize: vertical;
+  transition: all ${({ theme }) => theme.transitions.fast};
+  animation: ${({ $hasError }) => $hasError ? shake : 'none'} 0.5s;
   
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors.primary};
+    border-color: ${({ theme, $hasError }) => 
+      $hasError ? theme.colors.error : theme.colors.primary};
+    box-shadow: 0 0 0 2px ${({ theme, $hasError }) => 
+      $hasError ? `${theme.colors.error}33` : `${theme.colors.primary}33`};
   }
 `;
 
 const FormSuccess = styled.div`
-  background-color: ${({ theme }) => theme.colors.success};
-  color: #fff;
+  background-color: ${({ theme }) => theme.colors.success}20;
+  color: ${({ theme }) => theme.colors.success};
   padding: ${({ theme }) => theme.spacing.md};
   border-radius: ${({ theme }) => theme.borderRadius.md};
   margin-bottom: ${({ theme }) => theme.spacing.lg};
+  display: flex;
+  align-items: center;
+  
+  svg {
+    margin-right: ${({ theme }) => theme.spacing.sm};
+  }
 `;
 
-const Contact: React.FC = () => {
+const Contact = () => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     subject: '',
-    message: '',
+    message: ''
   });
-  
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -193,7 +239,7 @@ const Contact: React.FC = () => {
         <ContactForm onSubmit={handleSubmit}>
           {isSubmitted && (
             <FormSuccess>
-              Mensagem enviada com sucesso! Entrarei em contato em breve.
+              <FiCheck /> Mensagem enviada com sucesso! Entrarei em contato em breve.
             </FormSuccess>
           )}
           

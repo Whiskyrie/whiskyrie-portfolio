@@ -1,5 +1,5 @@
 // src/pages/Home.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Button from '../components/ui/Button';
 import { FiArrowRight, FiGithub, FiLinkedin } from 'react-icons/fi';
@@ -15,6 +15,16 @@ const fadeIn = keyframes`
   }
 `;
 
+const typewriter = keyframes`
+  from { width: 0 }
+  to { width: 100% }
+`;
+
+const blink = keyframes`
+  from, to { border-color: transparent }
+  50% { border-color: ${({ theme }) => theme.colors.primary}; }
+`;
+
 const HeroSection = styled.section`
   display: flex;
   flex-direction: column;
@@ -22,7 +32,6 @@ const HeroSection = styled.section`
   align-items: flex-start;
   min-height: calc(100vh - 80px);
   padding: ${({ theme }) => theme.spacing['2xl']} 0;
-  animation: ${fadeIn} 1s ease;
   
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     text-align: center;
@@ -35,12 +44,24 @@ const Greeting = styled.h3`
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   color: ${({ theme }) => theme.colors.primary};
   margin-bottom: ${({ theme }) => theme.spacing.md};
+  opacity: 0;
+  animation: ${fadeIn} 0.5s ease forwards;
+  animation-delay: 0.2s;
+`;
+
+const NameContainer = styled.div`
+  overflow: hidden;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
 `;
 
 const Name = styled.h1`
   font-size: 3.5rem;
   font-weight: ${({ theme }) => theme.fontWeights.bold};
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: ${typewriter} 1.5s steps(20, end) forwards;
+  border-right: 3px solid ${({ theme }) => theme.colors.primary};
   
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: 2.5rem;
@@ -52,6 +73,9 @@ const Role = styled.h2`
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   color: ${({ theme }) => theme.colors.lightText};
   margin-bottom: ${({ theme }) => theme.spacing.xl};
+  opacity: 0;
+  animation: ${fadeIn} 0.5s ease forwards;
+  animation-delay: 1.5s;
   
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: ${({ theme }) => theme.fontSizes.lg};
@@ -63,12 +87,18 @@ const Description = styled.p`
   max-width: 600px;
   margin-bottom: ${({ theme }) => theme.spacing.xl};
   line-height: ${({ theme }) => theme.lineHeights.loose};
+  opacity: 0;
+  animation: ${fadeIn} 0.5s ease forwards;
+  animation-delay: 1.8s;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.md};
   margin-bottom: ${({ theme }) => theme.spacing.xl};
+  opacity: 0;
+  animation: ${fadeIn} 0.5s ease forwards;
+  animation-delay: 2.1s;
   
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     flex-direction: column;
@@ -79,6 +109,9 @@ const ButtonContainer = styled.div`
 const SocialLinks = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.md};
+  opacity: 0;
+  animation: ${fadeIn} 0.5s ease forwards;
+  animation-delay: 2.4s;
 `;
 
 const SocialLink = styled.a`
@@ -101,10 +134,24 @@ const SocialLink = styled.a`
 `;
 
 const Home: React.FC = () => {
+  const [showCursor, setShowCursor] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowCursor(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <HeroSection>
       <Greeting>Olá, meu nome é</Greeting>
-      <Name>Evandro Filho</Name>
+      <NameContainer>
+        <Name style={{ borderRight: showCursor ? undefined : 'none' }}>
+          Evandro Filho
+        </Name>
+      </NameContainer>
       <Role>Desenvolvedor Web & Mobile</Role>
       <Description>
         Graduando em Ciências da Computação com foco em desenvolvimento de software,

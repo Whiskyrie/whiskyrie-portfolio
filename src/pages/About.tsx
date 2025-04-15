@@ -1,7 +1,19 @@
 // src/pages/About.tsx
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import SectionTitle from '../components/ui/SectionTitle';
+import ProfileImage from '../components/ui/ProfileImage';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const AboutSection = styled.section`
   padding: ${({ theme }) => theme.spacing['3xl']} 0;
@@ -11,6 +23,7 @@ const Content = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: ${({ theme }) => theme.spacing.xl};
+  animation: ${fadeIn} 0.8s ease;
   
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     grid-template-columns: 1fr;
@@ -33,33 +46,17 @@ const ImageContainer = styled.div`
   }
 `;
 
-const AboutImage = styled.div`
-  width: 100%;
-  height: 400px;
-  background-color: ${({ theme }) => theme.colors.primary};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  position: relative;
-  z-index: 1;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border: 2px solid ${({ theme }) => theme.colors.primary};
-    border-radius: ${({ theme }) => theme.borderRadius.md};
-    top: 20px;
-    left: 20px;
-    z-index: -1;
-  }
-`;
-
 const InfoBox = styled.div`
   background-color: ${({ theme }) => theme.colors.card};
   padding: ${({ theme }) => theme.spacing.lg};
   border-radius: ${({ theme }) => theme.borderRadius.md};
   margin-top: ${({ theme }) => theme.spacing.xl};
   box-shadow: ${({ theme }) => theme.boxShadow.md};
+  transition: transform ${({ theme }) => theme.transitions.normal};
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
 `;
 
 const InfoTitle = styled.h3`
@@ -84,6 +81,9 @@ const InfoList = styled.ul`
     }
   }
 `;
+
+// URL da imagem de placeholder - substitua pela URL de sua imagem real
+const profileImageUrl = "https://via.placeholder.com/400x400?text=Evandro+Filho";
 
 const About: React.FC = () => {
   return (
@@ -123,7 +123,7 @@ const About: React.FC = () => {
         </TextContent>
         
         <ImageContainer>
-          <AboutImage />
+          <ProfileImage src={profileImageUrl} alt="Evandro Filho" />
         </ImageContainer>
       </Content>
     </AboutSection>

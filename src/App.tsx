@@ -1,6 +1,5 @@
-import { ThemeProvider } from 'styled-components';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { theme } from './styles/theme';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { GlobalStyle } from './styles/global';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
@@ -9,12 +8,14 @@ import Projects from './pages/Projects';
 import Skills from './pages/Skills';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
+import ScrollToTop from './components/utils/ScrollToTop';
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider>
       <GlobalStyle />
       <Router>
+        <ScrollToTop />
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
