@@ -20,6 +20,8 @@ export const GlobalStyle = createGlobalStyle`
     background-color: ${({ theme }) => theme.colors.background};
     line-height: ${({ theme }) => theme.lineHeights.normal};
     transition: background-color ${({ theme }) => theme.transitions.normal};
+    min-height: 100vh; /* Garante altura mínima total da viewport */
+    position: relative; /* Importante para posicionamento correto */
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -50,13 +52,15 @@ export const GlobalStyle = createGlobalStyle`
     font-family: ${({ theme }) => theme.fonts.code};
   }
   
+  /* Configurações essenciais para resolver problema do footer */
   html, body, #root {
-    height: 100%;
+    height: 100%; /* Importante - garante que altura total seja disponível */
   }
 
   #root {
     display: flex;
     flex-direction: column;
+    min-height: 100vh; /* Viewport height total */
   }
   
   /* Para dispositivos móveis */

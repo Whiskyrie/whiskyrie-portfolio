@@ -15,8 +15,10 @@ const fadeIn = keyframes`
   }
 `;
 
+// Ajustamos o espaçamento na seção About
 const AboutSection = styled.section`
   padding: ${({ theme }) => theme.spacing['3xl']} 0;
+  margin-bottom: 2rem; // Margem adicional no final da seção
 `;
 
 const Content = styled.div`

@@ -20,10 +20,6 @@ const typewriter = keyframes`
   to { width: 100% }
 `;
 
-const blink = keyframes`
-  from, to { border-color: transparent }
-  50% { border-color: ${({ theme }) => theme.colors.primary}; }
-`;
 
 const HeroSection = styled.section`
   display: flex;

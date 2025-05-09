@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { FiMenu, FiX } from 'react-icons/fi';
+import ThemeToggle from '../ui/ThemeToggle';
 
 const NavbarContainer = styled.nav`
   position: fixed;
@@ -83,6 +84,18 @@ const NavLink = styled(Link)`
   }
 `;
 
+// Novo container para agrupar o botão de tema com os itens de navegação
+const NavActionsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    margin-top: 1rem;
+    align-self: center;
+  }
+`;
+
 const MenuButton = styled.button`
   display: none;
   background: none;
@@ -135,6 +148,9 @@ const Navbar: React.FC = () => {
         <NavLink to="/projetos" onClick={closeMenu}>Projetos</NavLink>
         <NavLink to="/habilidades" onClick={closeMenu}>Habilidades</NavLink>
         <NavLink to="/contato" onClick={closeMenu}>Contato</NavLink>
+        <NavActionsContainer>
+          <ThemeToggle />
+        </NavActionsContainer>
       </NavItems>
     </NavbarContainer>
   );

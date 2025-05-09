@@ -3,11 +3,13 @@ import React from 'react';
 import styled from 'styled-components';
 import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
 
-const FooterContainer = styled.footer`
+const FooterContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.secondaryDark};
   color: ${({ theme }) => theme.colors.darkText};
   padding: 2rem;
   text-align: center;
+  width: 100%;
+  /* Removemos position: fixed ou absolute que poderia causar sobreposição */
 `;
 
 const FooterContent = styled.div`

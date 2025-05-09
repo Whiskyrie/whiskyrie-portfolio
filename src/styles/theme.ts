@@ -103,10 +103,30 @@ export const theme = {
     ...theme,
     colors: {
       ...theme.colors,
-      background: theme.colors.darkBackground,
-      text: theme.colors.darkText,
-      card: theme.colors.darkCard,
-      border: theme.colors.darkBorder,
+      background: '#1A1A24',
+      darkBackground: '#121218',
+      
+      text: '#F0F0F5',
+      lightText: '#A0A0B2',
+      darkText: '#FFFFFF',
+      
+      card: '#25252F',
+      darkCard: '#1E1E28',
+      border: '#3A3A48',
+      darkBorder: '#4A4A58',
+      
+      primaryLight: '#B54058', 
+      secondaryLight: '#4F4F62',
+      
+      success: '#4CAF50', 
+      error: '#F44336',
+      warning: '#FFC107', 
+    },
+    
+    boxShadow: {
+      sm: '0 1px 3px rgba(0, 0, 0, 0.3)',
+      md: '0 4px 6px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3)',
+      lg: '0 10px 15px rgba(0, 0, 0, 0.5), 0 4px 6px rgba(0, 0, 0, 0.4)',
     },
   };
 

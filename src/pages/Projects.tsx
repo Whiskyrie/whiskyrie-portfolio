@@ -14,8 +14,11 @@ const fadeIn = keyframes`
   }
 `;
 
+
+// Ajustamos para garantir espaçamento adequado no final da página
 const ProjectsSection = styled.section`
   padding: ${({ theme }) => theme.spacing['3xl']} 0;
+  margin-bottom: 2rem; // Margem adicional no final da seção
   animation: ${fadeIn} 0.8s ease;
 `;
 
