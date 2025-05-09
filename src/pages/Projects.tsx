@@ -85,8 +85,7 @@ const projectsData: Project[] = [
     techStack: ["React Native", "TypeScript", "Node.js"],
     githubUrl: "https://github.com/Whiskyrie/TransportManager",
     category: "mobile",
-    logoSrc:
-      "https://raw.githubusercontent.com/Whiskyrie/TransportManager/main/Assets/icon.png",
+    logoSrc: "https://i.postimg.cc/sDzxxJnc/image.png", // Verifique se esta URL está acessível
   },
   {
     id: 2,
@@ -105,7 +104,7 @@ const projectsData: Project[] = [
       "Aplicativo de sincronização de tarefas desenvolvido com Node.js. Sincronização de tarefas feitas quando identifica-se que o usuário está online.",
     techStack: ["Node.js", "JavaScript"],
     githubUrl: "https://github.com/Whiskyrie/TaskSyncApp",
-    category: "web",
+    category: "mobile",
     logoSrc: "https://i.postimg.cc/5Xgy643C/icon.png",
   },
 ];
@@ -152,6 +151,7 @@ const Projects: React.FC = () => {
             githubUrl={project.githubUrl}
             demoUrl={project.demoUrl}
             logoSrc={project.logoSrc}
+            category={project.category} // Passando a categoria correta
           />
         ))}
       </ProjectsGrid>

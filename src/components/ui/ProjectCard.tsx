@@ -22,6 +22,7 @@ interface ProjectCardProps {
   githubUrl: string;
   demoUrl?: string;
   logoSrc?: string;
+  category: string; // Adicionando a propriedade category
 }
 
 const StyledProjectCard = styled(Card)`
@@ -174,20 +175,29 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   githubUrl,
   demoUrl,
   logoSrc,
+  category, // Usando a propriedade category passada
 }) => {
-  // Extraímos a categoria do GitHub URL (apenas um exemplo, você pode ajustar)
-  const category = githubUrl.includes("mobile")
-    ? "mobile"
-    : githubUrl.includes("desktop")
-    ? "desktop"
-    : "web";
+  // Removendo a lógica de determinação de categoria baseada na URL
+  // const category = githubUrl.includes("mobile")
+  //   ? "mobile"
+  //   : githubUrl.includes("desktop")
+  //   ? "desktop"
+  //   : "web";
 
   return (
     <StyledProjectCard>
       <CardHeader>
         <LogoContainer>
           {logoSrc ? (
-            <ProjectLogo src={logoSrc} alt={`${title} Logo`} />
+            <ProjectLogo
+              src={logoSrc}
+              alt={`${title} Logo`}
+              onError={(e) => {
+                e.currentTarget.onerror = null; // Evita loop infinito
+                e.currentTarget.src =
+                  "https://via.placeholder.com/40?text=Logo"; // URL de fallback
+              }}
+            />
           ) : (
             <FiCode />
           )}
