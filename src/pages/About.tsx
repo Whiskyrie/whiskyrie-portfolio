@@ -1,8 +1,7 @@
 // src/pages/About.tsx
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
-import SectionTitle from '../components/ui/SectionTitle';
-import ProfileImage from '../components/ui/ProfileImage';
+import React from "react";
+import styled, { keyframes } from "styled-components";
+import SectionTitle from "../components/ui/SectionTitle";
 
 const fadeIn = keyframes`
   from {
@@ -15,20 +14,26 @@ const fadeIn = keyframes`
   }
 `;
 
-// Ajustamos o espaçamento na seção About
+// Ajustamos o espaçamento na seção Abouts
 const AboutSection = styled.section`
-  padding: ${({ theme }) => theme.spacing['3xl']} 0;
+  padding: ${({ theme }) => theme.spacing["3xl"]} 0;
   margin-bottom: 2rem; // Margem adicional no final da seção
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Content = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: ${({ theme }) => theme.spacing.xl};
   animation: ${fadeIn} 0.8s ease;
-  
+  max-width: 800px;
+  width: 100%;
+
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     grid-template-columns: 1fr;
+    padding: 0 ${({ theme }) => theme.spacing.md};
   }
 `;
 
@@ -36,15 +41,10 @@ const TextContent = styled.div`
   p {
     margin-bottom: ${({ theme }) => theme.spacing.lg};
     line-height: ${({ theme }) => theme.lineHeights.loose};
-  }
-`;
-
-const ImageContainer = styled.div`
-  position: relative;
-  
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    margin-top: ${({ theme }) => theme.spacing.xl};
-    grid-row: 1;
+    font-size: ${({ theme }) => theme.fontSizes.md};
+    opacity: 0;
+    animation: ${fadeIn} 1s ease forwards;
+    animation-delay: calc(var(--delay) * 200ms);
   }
 `;
 
@@ -55,7 +55,7 @@ const InfoBox = styled.div`
   margin-top: ${({ theme }) => theme.spacing.xl};
   box-shadow: ${({ theme }) => theme.boxShadow.md};
   transition: transform ${({ theme }) => theme.transitions.normal};
-  
+
   &:hover {
     transform: translateY(-5px);
   }
@@ -70,22 +70,19 @@ const InfoTitle = styled.h3`
 const InfoList = styled.ul`
   list-style-type: none;
   padding: 0;
-  
+
   li {
     margin-bottom: ${({ theme }) => theme.spacing.sm};
     display: flex;
     align-items: center;
-    
+
     &::before {
-      content: '→';
+      content: "→";
       color: ${({ theme }) => theme.colors.primary};
       margin-right: ${({ theme }) => theme.spacing.sm};
     }
   }
 `;
-
-// URL da imagem de placeholder - substitua pela URL de sua imagem real
-const profileImageUrl = "https://via.placeholder.com/400x400?text=Evandro+Filho";
 
 const About: React.FC = () => {
   return (
@@ -94,26 +91,31 @@ const About: React.FC = () => {
       <Content>
         <TextContent>
           <p>
-            Olá! Sou Evandro, um desenvolvedor web e mobile em formação, atualmente cursando 
-            Ciências da Computação na Universidade Tecnológica Federal do Paraná (UTFPR-MD).
+            Olá! Sou Evandro, um desenvolvedor web e mobile em formação,
+            atualmente cursando Ciências da Computação na Universidade
+            Tecnológica Federal do Paraná (UTFPR-MD).
           </p>
           <p>
-            Minha jornada na programação começou com o interesse em criar soluções tecnológicas 
-            para problemas do cotidiano. Desde então, venho me aprimorando em tecnologias como 
-            JavaScript/TypeScript, React Native e Node.js, sempre buscando aprender e aplicar 
-            novas habilidades em projetos práticos.
+            Minha jornada na programação começou com o interesse em criar
+            soluções tecnológicas para problemas do cotidiano. Desde então,
+            venho me aprimorando em tecnologias como JavaScript/TypeScript,
+            React Native e Node.js, sempre buscando aprender e aplicar novas
+            habilidades em projetos práticos.
           </p>
           <p>
-            Estou em constante evolução, buscando oportunidades de estágio onde possa contribuir 
-            com equipes de desenvolvimento e expandir meus conhecimentos em um ambiente profissional.
+            Estou em constante evolução, buscando oportunidades de estágio onde
+            possa contribuir com equipes de desenvolvimento e expandir meus
+            conhecimentos em um ambiente profissional.
           </p>
-          
+
           <InfoBox>
             <InfoTitle>Educação</InfoTitle>
             <InfoList>
-              <li>Bacharelado em Ciências da Computação - UTFPR-MD (2023-2027)</li>
+              <li>
+                Bacharelado em Ciências da Computação - UTFPR-MD (2023-2027)
+              </li>
             </InfoList>
-            
+
             <InfoTitle>Interesses</InfoTitle>
             <InfoList>
               <li>Desenvolvimento Backend</li>
@@ -123,10 +125,6 @@ const About: React.FC = () => {
             </InfoList>
           </InfoBox>
         </TextContent>
-        
-        <ImageContainer>
-          <ProfileImage src={profileImageUrl} alt="Evandro Filho" />
-        </ImageContainer>
       </Content>
     </AboutSection>
   );

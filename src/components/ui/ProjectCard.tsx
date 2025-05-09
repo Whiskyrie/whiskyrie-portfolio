@@ -1,8 +1,18 @@
-import React from 'react';
-import styled from 'styled-components';
-import { FiGithub, FiExternalLink } from 'react-icons/fi';
-import Card from './Card';
-import Button from './Button';
+import React from "react";
+import styled, { keyframes } from "styled-components";
+import { FiGithub, FiExternalLink, FiCode, FiStar } from "react-icons/fi";
+import Card from "./Card";
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 interface ProjectCardProps {
   id: number;
@@ -11,41 +21,80 @@ interface ProjectCardProps {
   techStack: string[];
   githubUrl: string;
   demoUrl?: string;
-  imageSrc?: string;
+  logoSrc?: string;
 }
 
 const StyledProjectCard = styled(Card)`
   height: 100%;
   display: flex;
   flex-direction: column;
+  transition: transform ${({ theme }) => theme.transitions.normal},
+    box-shadow ${({ theme }) => theme.transitions.normal};
+  animation: ${fadeIn} 0.6s ease forwards;
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  overflow: hidden;
+  background-color: ${({ theme }) => theme.colors.card};
+
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: ${({ theme }) => theme.boxShadow.lg};
+  }
 `;
 
-const ProjectImage = styled.div<{ $imageSrc?: string }>`
-  height: 200px;
+const CardHeader = styled.div`
+  padding: ${({ theme }) => theme.spacing.md};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
+`;
+
+const LogoContainer = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  overflow: hidden;
   background-color: ${({ theme }) => theme.colors.secondaryLight};
-  background-image: ${({ $imageSrc }) => $imageSrc ? `url(${$imageSrc})` : 'none'};
-  background-size: cover;
-  background-position: center;
-  border-radius: ${({ theme }) => theme.borderRadius.md} ${({ theme }) => theme.borderRadius.md} 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ProjectLogo = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const HeaderContent = styled.div`
+  flex-grow: 1;
+`;
+
+const ProjectTitle = styled.h3`
+  font-size: ${({ theme }) => theme.fontSizes.md};
+  color: ${({ theme }) => theme.colors.text};
+  margin: 0;
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+`;
+
+const ProjectCategory = styled.div`
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.lightText};
+  text-transform: capitalize;
 `;
 
 const ProjectContent = styled.div`
-  padding: ${({ theme }) => theme.spacing.lg};
+  padding: ${({ theme }) => theme.spacing.md};
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 `;
 
-const ProjectTitle = styled.h3`
-  font-size: ${({ theme }) => theme.fontSizes.lg};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-  color: ${({ theme }) => theme.colors.text};
-`;
-
 const ProjectDescription = styled.p`
   margin-bottom: ${({ theme }) => theme.spacing.lg};
-  flex-grow: 1;
-  color: ${({ theme }) => theme.colors.text}; // Adicionar referência explícita à cor do texto
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.text};
+  line-height: 1.5;
 `;
 
 const TechStack = styled.div`
@@ -56,17 +105,66 @@ const TechStack = styled.div`
 `;
 
 const TechTag = styled.span`
-  background-color: ${({ theme }) => theme.colors.primaryLight};
-  color: #fff;
+  background-color: ${({ theme }) => theme.colors.primaryLight}20;
+  color: ${({ theme }) => theme.colors.primary};
   padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
-  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  border-radius: ${({ theme }) => theme.borderRadius.full};
   font-size: ${({ theme }) => theme.fontSizes.xs};
   font-weight: ${({ theme }) => theme.fontWeights.medium};
+  transition: transform ${({ theme }) => theme.transitions.fast};
+
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 
-const ProjectLinks = styled.div`
+const ProjectStats = styled.div`
   display: flex;
-  gap: ${({ theme }) => theme.spacing.md};
+  justify-content: space-between;
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
+  padding-top: ${({ theme }) => theme.spacing.md};
+  margin-top: auto;
+`;
+
+const StatItem = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.lightText};
+
+  svg {
+    margin-right: ${({ theme }) => theme.spacing.xs};
+    font-size: ${({ theme }) => theme.fontSizes.sm};
+  }
+`;
+
+const CardFooter = styled.div`
+  padding: ${({ theme }) => theme.spacing.md};
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const FooterButton = styled.a`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing.xs};
+  color: ${({ theme }) => theme.colors.primary};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  transition: background-color ${({ theme }) => theme.transitions.fast};
+  text-decoration: none;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primaryLight}10;
+  }
 `;
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -75,44 +173,69 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   techStack,
   githubUrl,
   demoUrl,
-  imageSrc
+  logoSrc,
 }) => {
+  // Extraímos a categoria do GitHub URL (apenas um exemplo, você pode ajustar)
+  const category = githubUrl.includes("mobile")
+    ? "mobile"
+    : githubUrl.includes("desktop")
+    ? "desktop"
+    : "web";
+
   return (
     <StyledProjectCard>
-      <ProjectImage $imageSrc={imageSrc} />
+      <CardHeader>
+        <LogoContainer>
+          {logoSrc ? (
+            <ProjectLogo src={logoSrc} alt={`${title} Logo`} />
+          ) : (
+            <FiCode />
+          )}
+        </LogoContainer>
+        <HeaderContent>
+          <ProjectTitle>{title}</ProjectTitle>
+          <ProjectCategory>{category}</ProjectCategory>
+        </HeaderContent>
+      </CardHeader>
+
       <ProjectContent>
-        <ProjectTitle>{title}</ProjectTitle>
         <ProjectDescription>{description}</ProjectDescription>
         <TechStack>
           {techStack.map((tech) => (
             <TechTag key={tech}>{tech}</TechTag>
           ))}
         </TechStack>
-        <ProjectLinks>
-          <Button
-            as="a"
-            href={githubUrl}
+
+        <ProjectStats>
+          <StatItem>
+            <FiCode />
+            <span>{techStack.length} tecnologias</span>
+          </StatItem>
+          <StatItem>
+            <FiStar />
+            <span>Projeto {category}</span>
+          </StatItem>
+        </ProjectStats>
+      </ProjectContent>
+
+      <CardFooter>
+        <FooterButton
+          href={githubUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <FiGithub /> GitHub
+        </FooterButton>
+        {demoUrl && (
+          <FooterButton
+            href={demoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            variant="outline"
-            size="sm"
           >
-            <FiGithub style={{ marginRight: '4px' }} /> GitHub
-          </Button>
-          {demoUrl && (
-            <Button
-              as="a"
-              href={demoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="primary"
-              size="sm"
-            >
-              <FiExternalLink style={{ marginRight: '4px' }} /> Demo
-            </Button>
-          )}
-        </ProjectLinks>
-      </ProjectContent>
+            <FiExternalLink /> Demo
+          </FooterButton>
+        )}
+      </CardFooter>
     </StyledProjectCard>
   );
 };
